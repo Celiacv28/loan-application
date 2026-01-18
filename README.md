@@ -62,7 +62,7 @@ PENDING ──┐
 The application uses PostgreSQL with the following main entities:
 - **User**: Stores user information (clients and managers)
 - **LoanRequest**: Stores loan application data
-- **StatusChange**: Tracks the history of status changes
+
 
 ## API Endpoints
 
@@ -206,7 +206,6 @@ mvn test
 - **Loan Calculator**: Real-time interest calculation and payment scheduling
 - **Notification System**: 
   - Email/SMS notifications for status changes
-  - Push notifications via mobile apps
   - In-app notification center
 - **Analytics & Reporting**:
   - Business intelligence dashboards
@@ -217,6 +216,7 @@ mvn test
 - **Multi-Currency Support**: Advanced currency conversion and management
 - **Collateral Management**: Track and manage loan guarantees and assets
 - **Payment Integration**: Connect with payment gateways for loan disbursement and collection
+- **Status Change Timestamps**: Store the date and time of each status change for loan requests, not just the current status.
 
 ### Advanced Technical Features
 - **Rate Limiting**: API throttling to prevent abuse and ensure fair usage
