@@ -62,7 +62,7 @@ PENDING ──┐
 The application uses PostgreSQL with the following main entities:
 - **User**: Stores user information (clients and managers)
 - **LoanRequest**: Stores loan application data
-- **StatusChange**: Tracks the history of status changes
+
 
 ## API Endpoints
 
@@ -77,7 +77,7 @@ The application uses PostgreSQL with the following main entities:
 - `GET /api/loan-requests` - Get all loan requests (with optional filters)
 - `GET /api/loan-requests/{id}` - Get loan request by ID
 - `POST /api/loan-requests` - Create new loan request
-- `PUT /api/loan-requests/{id}/status` - Update loan request status
+- `PATCH /api/loan-requests/{id}/status` - Update loan request status
 
 ## Setup and Installation
 
@@ -103,21 +103,16 @@ spring.datasource.password=your_password
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd prestamos
+   cd loan-application
    ```
 
-2. **Navigate to the application directory**
-   ```bash
-   cd app
-   ```
-
-3. **Install dependencies**
+2. **Install dependencies**
    ```bash
    mvn clean install
    ```
 
 
-4. **Run the application**
+3. **Run the application**
   ```bash
   mvn spring-boot:run
   ```
@@ -206,7 +201,6 @@ mvn test
 - **Loan Calculator**: Real-time interest calculation and payment scheduling
 - **Notification System**: 
   - Email/SMS notifications for status changes
-  - Push notifications via mobile apps
   - In-app notification center
 - **Analytics & Reporting**:
   - Business intelligence dashboards
@@ -217,6 +211,7 @@ mvn test
 - **Multi-Currency Support**: Advanced currency conversion and management
 - **Collateral Management**: Track and manage loan guarantees and assets
 - **Payment Integration**: Connect with payment gateways for loan disbursement and collection
+- **Status Change Timestamps**: Store the date and time of each status change for loan requests, not just the current status.
 
 ### Advanced Technical Features
 - **Rate Limiting**: API throttling to prevent abuse and ensure fair usage
