@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import com.project.loan.dto.CreateLoanRequestDTO;
 import com.project.loan.models.LoanRequest;
 import com.project.loan.models.LoanStatus;
+import com.project.loan.dto.ChangeLoanStatusDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -46,13 +47,13 @@ public interface LoanRequestController {
             @Parameter(description = "Datos de la solicitud a crear", required = true)
             @RequestBody CreateLoanRequestDTO createLoanRequestDTO);
 
-    @PutMapping("/{id}/status")
+    @PatchMapping("/{id}/status")
     @Operation(summary = "Actualizar estado de solicitud", 
                description = "Actualiza el estado de una solicitud de préstamo")
     @ApiResponse(responseCode = "200", description = "Estado actualizado exitosamente")
     ResponseEntity<LoanRequest> updateLoanRequestStatus(
             @Parameter(description = "ID de la solicitud", required = true)
             @PathVariable Long id,
-            @Parameter(description = "Nuevo estado de la solicitud", required = true)
-            @RequestBody LoanStatus newStatus);
+            @Parameter(description = "Nuevo estado de la solicitud (ejemplo: {\"status\": \"APPROVED\"})", required = true)
+            @RequestBody ChangeLoanStatusDTO changeLoanStatusDTO);
 }
