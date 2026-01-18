@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: loan
+  datasource:
+    url: jdbc:postgresql://localhost:5432/loan
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  health:
+    db:
+      enabled: true
+
+api:
+  path: /
+
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
