@@ -1,18 +1,21 @@
 package com.project.loan.services;
 
-import com.project.loan.models.LoanRequest;
-import com.project.loan.models.LoanStatus;
-import com.project.loan.models.User;
-import com.project.loan.dto.CreateLoanRequestDTO;
-import com.project.loan.mappers.LoanRequestMapper;
-import com.project.loan.repo.LoanRequestRepository;
-import com.project.loan.repo.UserRepository;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import com.project.loan.dto.ChangeLoanStatusDTO;
+import com.project.loan.dto.CreateLoanRequestDTO;
+import com.project.loan.mappers.LoanRequestMapper;
+import com.project.loan.models.LoanRequest;
+import com.project.loan.models.LoanStatus;
+import com.project.loan.models.User;
+import com.project.loan.repo.LoanRequestRepository;
+import com.project.loan.repo.UserRepository;
+
+
 
 @Service
 public class LoanRequestServiceImpl implements LoanRequestService {
@@ -42,21 +45,23 @@ public class LoanRequestServiceImpl implements LoanRequestService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         LoanRequest loanRequest = loanRequestMapper.toEntity(createLoanRequestDTO, user);
+        loanRequest.setStatus(LoanStatus.PENDING);
+        loanRequest.setCreatedAt(java.time.LocalDateTime.now());
         return loanRequestRepository.save(loanRequest);
     }
 
     @Override
-    public Optional<LoanRequest> updateLoanRequestStatus(Long id, LoanStatus newStatus) {
+    public Optional<LoanRequest> updateLoanRequestStatus(Long id, ChangeLoanStatusDTO newStatus) {
         return loanRequestRepository.findById(id)
                 .map(loanRequest -> {
                     LoanStatus currentStatus = loanRequest.getStatus();
                     
-                    if (!isValidStatusTransition(currentStatus, newStatus)) {
+                    if (!isValidStatusTransition(currentStatus, newStatus.getStatus())) {
                         throw new RuntimeException("Transición de estado no permitida: " + 
-                                currentStatus + " -> " + newStatus);
+                                currentStatus + " -> " + newStatus.getStatus());
                     }
 
-                    loanRequest.setStatus(newStatus);
+                    loanRequest.setStatus(newStatus.getStatus());
                     
                     return loanRequestRepository.save(loanRequest);
                 });

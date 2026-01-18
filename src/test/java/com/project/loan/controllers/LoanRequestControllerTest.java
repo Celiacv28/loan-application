@@ -3,6 +3,7 @@ package com.project.loan.controllers;
 import com.project.loan.dto.CreateLoanRequestDTO;
 import com.project.loan.models.LoanRequest;
 import com.project.loan.models.LoanStatus;
+import com.project.loan.dto.ChangeLoanStatusDTO;
 import com.project.loan.models.User;
 import com.project.loan.models.UserType;
 import com.project.loan.services.LoanRequestService;
@@ -17,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -195,7 +197,7 @@ class LoanRequestControllerTest {
     }
 
     @Test
-    @DisplayName("PUT update loan request status")
+    @DisplayName("PATCH update loan request status")
     void testUpdateLoanRequestStatus() throws Exception {
         LoanRequest updatedRequest = new LoanRequest();
         updatedRequest.setId(1L);
@@ -205,12 +207,15 @@ class LoanRequestControllerTest {
         updatedRequest.setStatus(LoanStatus.APPROVED);
         updatedRequest.setCreatedAt(LocalDateTime.now());
 
-        when(loanRequestService.updateLoanRequestStatus(eq(1L), eq(LoanStatus.APPROVED)))
+        ChangeLoanStatusDTO changeStatusDTO = new ChangeLoanStatusDTO();
+        changeStatusDTO.setStatus(LoanStatus.APPROVED);
+
+        when(loanRequestService.updateLoanRequestStatus(eq(1L), any(ChangeLoanStatusDTO.class)))
                 .thenReturn(Optional.of(updatedRequest));
 
-        String jsonContent = objectMapper.writeValueAsString(LoanStatus.APPROVED);
+        String jsonContent = objectMapper.writeValueAsString(changeStatusDTO);
 
-        mockMvc.perform(put("/api/loan-requests/1/status")
+        mockMvc.perform(patch("/api/loan-requests/1/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonContent))
                 .andExpect(status().isOk())
@@ -218,39 +223,45 @@ class LoanRequestControllerTest {
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.status").value("APPROVED"));
 
-        verify(loanRequestService).updateLoanRequestStatus(eq(1L), eq(LoanStatus.APPROVED));
+        verify(loanRequestService).updateLoanRequestStatus(eq(1L), any(ChangeLoanStatusDTO.class));
     }
 
     @Test
-    @DisplayName("PUT update loan request status not found")
+    @DisplayName("PATCH update loan request status not found")
     void testUpdateLoanRequestStatus_NotFound() throws Exception {
-        when(loanRequestService.updateLoanRequestStatus(eq(999L), eq(LoanStatus.APPROVED)))
+        ChangeLoanStatusDTO changeStatusDTO = new ChangeLoanStatusDTO();
+        changeStatusDTO.setStatus(LoanStatus.APPROVED);
+
+        when(loanRequestService.updateLoanRequestStatus(eq(999L), any(ChangeLoanStatusDTO.class)))
                 .thenReturn(Optional.empty());
 
-        String jsonContent = objectMapper.writeValueAsString(LoanStatus.APPROVED);
+        String jsonContent = objectMapper.writeValueAsString(changeStatusDTO);
 
-        mockMvc.perform(put("/api/loan-requests/999/status")
+        mockMvc.perform(patch("/api/loan-requests/999/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonContent))
                 .andExpect(status().isNotFound());
 
-        verify(loanRequestService).updateLoanRequestStatus(eq(999L), eq(LoanStatus.APPROVED));
+        verify(loanRequestService).updateLoanRequestStatus(eq(999L), any(ChangeLoanStatusDTO.class));
     }
 
     @Test
-    @DisplayName("PUT update loan request status with exception")
+    @DisplayName("PATCH update loan request status with exception")
     void testUpdateLoanRequestStatus_WithException_ShouldReturnBadRequest() throws Exception {
-        when(loanRequestService.updateLoanRequestStatus(eq(1L), eq(LoanStatus.APPROVED)))
+        ChangeLoanStatusDTO changeStatusDTO = new ChangeLoanStatusDTO();
+        changeStatusDTO.setStatus(LoanStatus.APPROVED);
+
+        when(loanRequestService.updateLoanRequestStatus(eq(1L), any(ChangeLoanStatusDTO.class)))
                 .thenThrow(new RuntimeException("Status update failed"));
 
-        String jsonContent = objectMapper.writeValueAsString(LoanStatus.APPROVED);
+        String jsonContent = objectMapper.writeValueAsString(changeStatusDTO);
 
-        mockMvc.perform(put("/api/loan-requests/1/status")
+        mockMvc.perform(patch("/api/loan-requests/1/status")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(jsonContent))
                 .andExpect(status().isBadRequest());
 
-        verify(loanRequestService).updateLoanRequestStatus(eq(1L), eq(LoanStatus.APPROVED));
+        verify(loanRequestService).updateLoanRequestStatus(eq(1L), any(ChangeLoanStatusDTO.class));
     }
 
     @Test
