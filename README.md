@@ -77,7 +77,7 @@ The application uses PostgreSQL with the following main entities:
 - `GET /api/loan-requests` - Get all loan requests (with optional filters)
 - `GET /api/loan-requests/{id}` - Get loan request by ID
 - `POST /api/loan-requests` - Create new loan request
-- `PUT /api/loan-requests/{id}/status` - Update loan request status
+- `PATCH /api/loan-requests/{id}/status` - Update loan request status
 
 ## Setup and Installation
 
@@ -103,21 +103,16 @@ spring.datasource.password=your_password
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd prestamos
+   cd loan-application
    ```
 
-2. **Navigate to the application directory**
-   ```bash
-   cd app
-   ```
-
-3. **Install dependencies**
+2. **Install dependencies**
    ```bash
    mvn clean install
    ```
 
 
-4. **Run the application**
+3. **Run the application**
   ```bash
   mvn spring-boot:run
   ```
