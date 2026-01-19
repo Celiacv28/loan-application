@@ -157,7 +157,9 @@ app/
 ```
 
 ### Testing
-Run tests with Maven:
+The project includes unit and integration tests for controllers and main application logic, located under `src/test/java/com/project/loan/`.
+
+Tests use the JUnit and Mockito libraries, which are included by default with Spring Boot. You can run all tests with Maven:
 ```bash
 mvn test
 ```
