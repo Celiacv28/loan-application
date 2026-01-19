@@ -31,12 +31,12 @@ public class LoanRequestServiceImpl implements LoanRequestService {
 
     @Override
     public List<LoanRequest> getAllLoanRequests(LoanStatus status, Long userId, String currency) {
-        User user = null;
         if (userId != null) {
-            user = userRepository.findById(userId)
-                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            if (!userRepository.existsById(userId)) {
+                throw new RuntimeException("Usuario no encontrado");
+            }
         }
-        return loanRequestRepository.findByFilters(status, user, currency);
+        return loanRequestRepository.findByFilters(status, userId, currency);
     }
 
     @Override
