@@ -31,7 +31,12 @@ public class LoanRequestServiceImpl implements LoanRequestService {
 
     @Override
     public List<LoanRequest> getAllLoanRequests(LoanStatus status, Long userId, String currency) {
-        return filterLoanRequests(status, userId, currency);
+        User user = null;
+        if (userId != null) {
+            user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        }
+        return loanRequestRepository.findByFilters(status, user, currency);
     }
 
     @Override
@@ -79,14 +84,5 @@ public class LoanRequestServiceImpl implements LoanRequestService {
             default:
                 return false;
         }
-    }
-
-    private List<LoanRequest> filterLoanRequests(LoanStatus status, Long userId, String currency) {
-        List<LoanRequest> all = loanRequestRepository.findAll();
-        return all.stream()
-                .filter(lr -> status == null || lr.getStatus() == status)
-                .filter(lr -> userId == null || (lr.getUser() != null && lr.getUser().getId().equals(userId)))
-                .filter(lr -> currency == null || (lr.getCurrency() != null && lr.getCurrency().equalsIgnoreCase(currency)))
-                .toList();
     }
 }
