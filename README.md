@@ -88,13 +88,15 @@ The application uses PostgreSQL with the following main entities:
 
 ### Database Setup
 1. Install PostgreSQL
-2. Create a database named `prestamos`
-3. Update database credentials in `application.properties`
+2. Create a database named `loan`
+3. Update database credentials in `application.yml` if needed:
 
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/prestamos
-spring.datasource.username=your_username
-spring.datasource.password=your_password
+```yaml
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/loan
+    username: postgres
+    password: postgres
 ```
 
 ### Running the Application
@@ -155,7 +157,9 @@ app/
 ```
 
 ### Testing
-Run tests with Maven:
+The project includes unit and integration tests for controllers and main application logic, located under `src/test/java/com/project/loan/`.
+
+Tests use the JUnit and Mockito libraries, which are included by default with Spring Boot. You can run all tests with Maven:
 ```bash
 mvn test
 ```
@@ -167,6 +171,10 @@ mvn test
   - Refine DTO and entity separation, and centralize mapping logic (e.g., using MapStruct) to decouple domain and transport layers
 - **Microservices**: Split into dedicated services for user management, loan processing, and notification handling
 - **User Role-based Access**: Limit features and access based on user type (e.g., admin, manager, client) if required for security and business logic.
+- **Improved API Error Handling**: Implement structured and user-friendly error responses in the API (e.g., using a standard JSON format with fields like `timestamp`, `status`, `error`, `message`, and `path`).
+  - Provide clear and specific messages for each error type (validation, not found, internal errors, etc.).
+  - Document possible error codes and their meanings in the API documentation (Swagger/OpenAPI).
+
 
 ### Security Enhancements
 - **IAM Platform Integration**: Manage users through dedicated Identity and Access Management platforms (e.g., Keycloak, Auth0, Azure AD)
@@ -176,7 +184,6 @@ mvn test
 ### Observability & Monitoring
 - **Centralized Logging**: Implement structured logging with tools like ELK Stack (Elasticsearch, Logstash, Kibana) or EFK (Elasticsearch, Fluentd, Kibana)
 - **Application Monitoring**: Add APM tools (Application Performance Monitoring) like Prometheus, Grafana, or New Relic
-- **Distributed Tracing**: Implement tracing with tools like Jaeger or Zipkin for microservices environments
 
 ### DevOps & Deployment
 - **CI/CD Pipeline**: Implement automated build, test, and deployment pipelines using:
@@ -185,8 +192,6 @@ mvn test
 - **Containerization**: 
   - **Docker**: Containerize applications for consistent deployment environments
   - **Kubernetes/OpenShift**: Orchestrate containers for scalability and high availability
-- **Infrastructure as Code**: Use tools like **Terraform** or **Ansible** for infrastructure management
-- **Blue-Green Deployments**: Implement zero-downtime deployment strategies
 
 ### Additional Features
 - **Event-Driven Architecture**: Use message brokers (Apache Kafka, RabbitMQ) for asynchronous communication
@@ -230,9 +235,7 @@ mvn test
   - Response compression
 - **Health Checks & Readiness Probes**: Kubernetes-ready health endpoints
 - **Metrics Collection**: Custom business and technical metrics
-- **Feature Flags**: Dynamic feature toggling for A/B testing and gradual rollouts
 - **Data Validation**: Advanced validation rules and business constraints
-- **Batch Processing**: Scheduled jobs for bulk operations and maintenance
 
 
 ## Contributing
