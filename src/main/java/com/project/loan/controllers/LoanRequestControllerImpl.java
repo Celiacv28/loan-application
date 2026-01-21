@@ -26,9 +26,9 @@ public class LoanRequestControllerImpl implements LoanRequestController {
     private LoanRequestService loanRequestService;
 
     @Override
-    public ResponseEntity<List<LoanRequest>> getAllLoanRequests(LoanStatus status, Long userId, String currency) {
-        log.info("[GET] getAllLoanRequests called with status={}, userId={}, currency={}", status, userId, currency);
-        List<LoanRequest> loanRequests = loanRequestService.getAllLoanRequests(status, userId, currency);
+    public ResponseEntity<List<LoanRequest>> getAllLoanRequests(LoanStatus status, Long clientId, String currency) {
+        log.info("[GET] getAllLoanRequests called with status={}, clientId={}, currency={}", status, clientId, currency);
+        List<LoanRequest> loanRequests = loanRequestService.getAllLoanRequests(status, clientId, currency);
         return ResponseEntity.ok(loanRequests);
     }
 

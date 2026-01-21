@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface LoanRequestService {
     
-    List<LoanRequest> getAllLoanRequests(LoanStatus status, Long userId, String currency);
+    List<LoanRequest> getAllLoanRequests(LoanStatus status, Long clientId, String currency);
     
     Optional<LoanRequest> getLoanRequestById(Long id);
     

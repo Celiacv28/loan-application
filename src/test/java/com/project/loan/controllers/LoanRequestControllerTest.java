@@ -4,8 +4,7 @@ import com.project.loan.dto.CreateLoanRequestDTO;
 import com.project.loan.models.LoanRequest;
 import com.project.loan.models.LoanStatus;
 import com.project.loan.dto.ChangeLoanStatusDTO;
-import com.project.loan.models.User;
-import com.project.loan.models.UserType;
+import com.project.loan.models.Client;
 import com.project.loan.services.LoanRequestService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +45,7 @@ class LoanRequestControllerTest {
     private LoanRequest testLoanRequest1;
     private LoanRequest testLoanRequest2;
     private CreateLoanRequestDTO createLoanRequestDTO;
-    private User testUser;
+    private Client testClient;
 
     @BeforeEach
     void setUp() {
@@ -54,17 +53,16 @@ class LoanRequestControllerTest {
         objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
 
-        testUser = new User();
-        testUser.setId(1L);
-        testUser.setName("Juan Pérez");
-        testUser.setType(UserType.CLIENT);
-        testUser.setDni("12345678A");
-        testUser.setEmail("juan@email.com");
-        testUser.setCreatedAt(LocalDateTime.now());
+        testClient = new Client();
+        testClient.setId(1L);
+        testClient.setName("Juan Pérez");
+        testClient.setDni("12345678A");
+        testClient.setEmail("juan@email.com");
+        testClient.setCreatedAt(LocalDateTime.now());
 
         testLoanRequest1 = new LoanRequest();
         testLoanRequest1.setId(1L);
-        testLoanRequest1.setUser(testUser);
+        testLoanRequest1.setClient(testClient);
         testLoanRequest1.setAmount(15000.0);
         testLoanRequest1.setCurrency("EUR");
         testLoanRequest1.setStatus(LoanStatus.PENDING);
@@ -72,14 +70,14 @@ class LoanRequestControllerTest {
 
         testLoanRequest2 = new LoanRequest();
         testLoanRequest2.setId(2L);
-        testLoanRequest2.setUser(testUser);
+        testLoanRequest2.setClient(testClient);
         testLoanRequest2.setAmount(25000.0);
         testLoanRequest2.setCurrency("USD");
         testLoanRequest2.setStatus(LoanStatus.APPROVED);
         testLoanRequest2.setCreatedAt(LocalDateTime.now());
 
         createLoanRequestDTO = new CreateLoanRequestDTO();
-        createLoanRequestDTO.setUserId(1L);
+        createLoanRequestDTO.setClientId(1L);
         createLoanRequestDTO.setAmount(10000.0);
         createLoanRequestDTO.setCurrency("EUR");
     }
@@ -114,7 +112,7 @@ class LoanRequestControllerTest {
 
         mockMvc.perform(get("/api/loan-requests")
                 .param("status", "PENDING")
-                .param("userId", "1")
+                .param("clientId", "1")
                 .param("currency", "EUR"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -157,7 +155,7 @@ class LoanRequestControllerTest {
     void testCreateLoanRequest_WithValidData_ShouldCreateRequest() throws Exception {
         LoanRequest savedRequest = new LoanRequest();
         savedRequest.setId(3L);
-        savedRequest.setUser(testUser);
+        savedRequest.setClient(testClient);
         savedRequest.setAmount(createLoanRequestDTO.getAmount());
         savedRequest.setCurrency(createLoanRequestDTO.getCurrency());
         savedRequest.setStatus(LoanStatus.PENDING);
@@ -201,7 +199,7 @@ class LoanRequestControllerTest {
     void testUpdateLoanRequestStatus() throws Exception {
         LoanRequest updatedRequest = new LoanRequest();
         updatedRequest.setId(1L);
-        updatedRequest.setUser(testUser);
+        updatedRequest.setClient(testClient);
         updatedRequest.setAmount(15000.0);
         updatedRequest.setCurrency("EUR");
         updatedRequest.setStatus(LoanStatus.APPROVED);
@@ -268,7 +266,7 @@ class LoanRequestControllerTest {
     @DisplayName("POST create loan request with invalid currency format")
     void testCreateLoanRequest_WithInvalidCurrency_ShouldReturnBadRequest() throws Exception {
         CreateLoanRequestDTO invalidDTO = new CreateLoanRequestDTO();
-        invalidDTO.setUserId(1L);
+        invalidDTO.setClientId(1L);
         invalidDTO.setAmount(10000.0);
         invalidDTO.setCurrency("INVALID"); // Divisa inválida
 
@@ -286,7 +284,7 @@ class LoanRequestControllerTest {
     @DisplayName("POST create loan request with negative amount")
     void testCreateLoanRequest_WithNegativeAmount_ShouldReturnBadRequest() throws Exception {
         CreateLoanRequestDTO invalidDTO = new CreateLoanRequestDTO();
-        invalidDTO.setUserId(1L);
+        invalidDTO.setClientId(1L);
         invalidDTO.setAmount(-5000.0); // Cantidad negativa
         invalidDTO.setCurrency("EUR");
 

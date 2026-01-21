@@ -1,19 +1,25 @@
 package com.project.loan.controllers;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.project.loan.dto.ChangeLoanStatusDTO;
 import com.project.loan.dto.CreateLoanRequestDTO;
 import com.project.loan.models.LoanRequest;
 import com.project.loan.models.LoanStatus;
-import com.project.loan.dto.ChangeLoanStatusDTO;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
-import java.util.List;
 
 @RequestMapping("/api/loan-requests")
 @Tag(name = "Loan Requests", description = "API para gestión de solicitudes de préstamos")
@@ -26,8 +32,8 @@ public interface LoanRequestController {
     ResponseEntity<List<LoanRequest>> getAllLoanRequests(
             @Parameter(description = "Filtrar por estado de la solicitud")
             @RequestParam(required = false) LoanStatus status,
-            @Parameter(description = "Filtrar por ID del usuario solicitante")
-            @RequestParam(required = false) Long userId,
+            @Parameter(description = "Filtrar por ID del cliente solicitante")
+            @RequestParam(required = false) Long ClientId,
             @Parameter(description = "Filtrar por divisa")
             @RequestParam(required = false) String currency);
 

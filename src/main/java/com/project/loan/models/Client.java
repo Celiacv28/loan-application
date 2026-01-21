@@ -1,18 +1,20 @@
 package com.project.loan.models;
 
-import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Email;
-
 import lombok.Data;
-
-import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "users")
-public class User {
+public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,10 +24,6 @@ public class User {
     @NotNull
     @Column
     private String name;
-
-    @Column(nullable = false)
-    @NotNull
-    private UserType type;
 
     @Column(unique = true)
     @NotNull
