@@ -170,7 +170,7 @@ mvn test
 ### Architectural Improvements
 - **Hexagonal Architecture**: If project complexity grows, consider implementing hexagonal architecture (ports and adapters) to improve maintainability and testability
   - Refine DTO and entity separation, and centralize mapping logic (e.g., using MapStruct) to decouple domain and transport layers
-- **Microservices**: Split into dedicated services for user management, loan processing, and notification handling
+- **Microservices**: Split into dedicated services for client management, loan processing, and notification handling
 - **User Role-based Access**: Limit features and access based on user type (e.g., admin, manager, client) if required for security and business logic.
   - **Examples:**
     - Only users with the `manager` role can change the status of a loan request (e.g., approve, reject, or cancel).
