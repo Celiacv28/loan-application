@@ -11,9 +11,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 @Schema(description = "DTO para crear una nueva solicitud de préstamo")
 public class CreateLoanRequestDTO {
     
-    @Schema(description = "ID del usuario que solicita el préstamo")
-    @NotNull(message = "El ID del usuario es obligatorio")
-    private Long userId;
+    @Schema(description = "ID del cliente que solicita el préstamo")
+    @NotNull(message = "El ID del cliente es obligatorio")
+    private Long clientId;
     
     @Schema(description = "Importe del préstamo solicitado")
     @NotNull(message = "El importe es obligatorio")

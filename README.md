@@ -25,7 +25,7 @@ The required data to create a loan request includes:
 The system must allow:
 - **List all loan requests** with optional filtering by:
   - Status (PENDING, APPROVED, REJECTED, CANCELLED)
-  - User ID
+  - Client ID
   - Currency
 - **Query a specific loan request** by its ID
 
@@ -60,18 +60,18 @@ PENDING ──┐
 
 ### Database Schema
 The application uses PostgreSQL with the following main entities:
-- **User**: Stores user information (clients and managers)
+- **Client**: Stores user information (clients and managers)
 - **LoanRequest**: Stores loan application data
 
 
 ## API Endpoints
 
-### User Management
-- `GET /api/users` - Get all users (with optional filters)
-- `GET /api/users/{id}` - Get user by ID
-- `POST /api/users` - Create new user
-- `PUT /api/users/{id}` - Update user
-- `DELETE /api/users/{id}` - Delete user
+### Client Management
+- `GET /api/client` - Get all clients (with optional filters)
+- `GET /api/client/{id}` - Get client by ID
+- `POST /api/client` - Create new client
+- `PUT /api/client/{id}` - Update client
+- `DELETE /api/client/{id}` - Delete client
 
 ### Loan Request Management
 - `GET /api/loan-requests` - Get all loan requests (with optional filters)
@@ -166,11 +166,18 @@ mvn test
 
 ## Future Extensions
 
+
 ### Architectural Improvements
 - **Hexagonal Architecture**: If project complexity grows, consider implementing hexagonal architecture (ports and adapters) to improve maintainability and testability
   - Refine DTO and entity separation, and centralize mapping logic (e.g., using MapStruct) to decouple domain and transport layers
-- **Microservices**: Split into dedicated services for user management, loan processing, and notification handling
+- **Microservices**: Split into dedicated services for client management, loan processing, and notification handling
 - **User Role-based Access**: Limit features and access based on user type (e.g., admin, manager, client) if required for security and business logic.
+  - **Examples:**
+    - Only users with the `manager` role can change the status of a loan request (e.g., approve, reject, or cancel).
+    - Users with the `client` role can only view their own loan requests and cannot modify the status of any loan request.
+    - Managers can view all loan requests in the system, while clients are restricted to their own data.
+    - Only managers can access endpoints for status modification (e.g., `PATCH /api/loan-requests/{id}/status`).
+    - Clients can use `GET /api/loan-requests` and `GET /api/loan-requests/{id}` but will only receive their own data.
 - **Improved API Error Handling**: Implement structured and user-friendly error responses in the API (e.g., using a standard JSON format with fields like `timestamp`, `status`, `error`, `message`, and `path`).
   - Provide clear and specific messages for each error type (validation, not found, internal errors, etc.).
   - Document possible error codes and their meanings in the API documentation (Swagger/OpenAPI).
@@ -195,7 +202,6 @@ mvn test
 
 ### Additional Features
 - **Event-Driven Architecture**: Use message brokers (Apache Kafka, RabbitMQ) for asynchronous communication
-- **Caching**: Implement Redis or Hazelcast for improved performance
 - **Database Optimization**: Add read replicas, connection pooling, and query optimization
 - **API Versioning**: Implement proper API versioning strategy for backward compatibility
 
@@ -221,18 +227,9 @@ mvn test
 ### Advanced Technical Features
 - **Rate Limiting**: API throttling to prevent abuse and ensure fair usage
 - **Circuit Breaker Pattern**: Resilience patterns for external service dependencies
-- **Data Encryption**: 
-  - End-to-end encryption for sensitive data
-  - Database encryption at rest
-  - TLS/SSL for data in transit
-- **Backup & Recovery**: 
-  - Automated database backups
-  - Point-in-time recovery capabilities
-  - Disaster recovery procedures
-- **Performance Optimization**:
-  - Database query optimization
-  - Connection pooling
-  - Response compression
+- **Data Encryption**: TLS in transit, encryption at rest, and protection of sensitive fields.
+- **Backup & Recovery**: Automated backups, point-in-time recovery, and disaster recovery planning.
+- **Performance Optimization**: Optimized queries, connection pooling, and response compression.
 - **Health Checks & Readiness Probes**: Kubernetes-ready health endpoints
 - **Metrics Collection**: Custom business and technical metrics
 - **Data Validation**: Advanced validation rules and business constraints

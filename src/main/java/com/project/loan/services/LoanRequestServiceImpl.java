@@ -11,9 +11,9 @@ import com.project.loan.dto.CreateLoanRequestDTO;
 import com.project.loan.mappers.LoanRequestMapper;
 import com.project.loan.models.LoanRequest;
 import com.project.loan.models.LoanStatus;
-import com.project.loan.models.User;
+import com.project.loan.models.Client;
 import com.project.loan.repo.LoanRequestRepository;
-import com.project.loan.repo.UserRepository;
+import com.project.loan.repo.ClientRepository;
 
 
 
@@ -24,19 +24,19 @@ public class LoanRequestServiceImpl implements LoanRequestService {
     private LoanRequestRepository loanRequestRepository;
     
     @Autowired
-    private UserRepository userRepository;
+    private ClientRepository clientRepository;
 
     @Autowired
     private LoanRequestMapper loanRequestMapper;
 
     @Override
-    public List<LoanRequest> getAllLoanRequests(LoanStatus status, Long userId, String currency) {
-        if (userId != null) {
-            if (!userRepository.existsById(userId)) {
-                throw new RuntimeException("Usuario no encontrado");
+    public List<LoanRequest> getAllLoanRequests(LoanStatus status, Long clientId, String currency) {
+        if (clientId != null) {
+            if (!clientRepository.existsById(clientId)) {
+                throw new RuntimeException("Cliente no encontrado");
             }
         }
-        return loanRequestRepository.findByFilters(status, userId, currency);
+        return loanRequestRepository.findByFilters(status, clientId, currency);
     }
 
     @Override
@@ -46,10 +46,10 @@ public class LoanRequestServiceImpl implements LoanRequestService {
 
     @Override
     public LoanRequest createLoanRequest(CreateLoanRequestDTO createLoanRequestDTO) {
-        User user = userRepository.findById(createLoanRequestDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Client client = clientRepository.findById(createLoanRequestDTO.getClientId())
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado"));
 
-        LoanRequest loanRequest = loanRequestMapper.toEntity(createLoanRequestDTO, user);
+        LoanRequest loanRequest = loanRequestMapper.toEntity(createLoanRequestDTO, client);
         loanRequest.setStatus(LoanStatus.PENDING);
         loanRequest.setCreatedAt(java.time.LocalDateTime.now());
         return loanRequestRepository.save(loanRequest);
