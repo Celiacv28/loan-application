@@ -175,12 +175,11 @@ mvn test
   - **Examples:**
     - Only users with the `manager` role can change the status of a loan request (e.g., approve, reject, or cancel).
     - Users with the `client` role can only view their own loan requests and cannot modify the status of any loan request.
-    - Managers can view all loan requests in the system, while clients are restricted to their own data.
-    - Only managers can access endpoints for status modification (e.g., `PATCH /api/loan-requests/{id}/status`).
-    - Clients can use `GET /api/loan-requests` and `GET /api/loan-requests/{id}` but will only receive their own data.
 - **Improved API Error Handling**: Implement structured and user-friendly error responses in the API (e.g., using a standard JSON format with fields like `timestamp`, `status`, `error`, `message`, and `path`).
   - Provide clear and specific messages for each error type (validation, not found, internal errors, etc.).
   - Document possible error codes and their meanings in the API documentation (Swagger/OpenAPI).
+-**Pagination & Sorting**: Add pagination and sorting (page, size, sort) to listing endpoints (e.g. GET /api/loan-requests) to improve performance and scalability.
+-**Concurrency Control**: Implement optimistic locking to prevent race conditions when multiple users update the same loan request simultaneously.
 
 
 ### Security Enhancements
